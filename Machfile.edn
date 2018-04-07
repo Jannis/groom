@@ -1,0 +1,7 @@
+{starwars-example {description "Builds and serves the Starwars example"
+                   product #{"./examples/starwars/public/js"
+                             "./examples/starwars/node_modules"
+                             "./examples/starwars/package-lock.json"
+                             "./examples/starwars/package.json"}
+                   produce #$ ["cd" "examples/starwars" "&&" "clj" "-i" "watch.clj"]}
+                   novelty (mach.core/file-exists? product)}
