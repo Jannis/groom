@@ -59,7 +59,7 @@ and basic client-side GraphQL state management. To play with it, run
 boot starwars-example
 ```
 
-Then open [http://localhost:8002/index.html](http://localhost:8002) in a browser.
+Then open [http://localhost:8002/index.html](http://localhost:8002/index.html) in a browser.
 
 The source code for this example is located in
 [examples/starwars/src/starwars.cljs](examples/starwars/src/starwars.cljs).
