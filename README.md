@@ -40,6 +40,30 @@
 * `groom.specs.sablono.v1`: Specs for Groom-enhanced Sablono UI definitions
 * `groom.specs.graphql.apollo.*`: Specs for Groom's Apollo bindings
 
+## Prerequisites
+
+Groom requires `boot` and `mach` to be installed:
+```sh
+# boot
+sudo bash -c "cd /usr/local/bin && curl -fsSLo boot https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh && chmod 755 boot"
+
+# mach
+sudo npm install -g @juxt/mach
+```
+
+## Run Examples
+
+There is currently only one example, demonstrating a few simple components
+and basic client-side GraphQL state management. To play with it, run
+```sh
+boot starwars-example
+```
+
+Then open [http://localhost:8002/index.html](http://localhost:8002) in a browser.
+
+The source code for this example is located in
+[examples/starwars/src/starwars.cljs](examples/starwars/src/starwars.cljs).
+
 ## License
 
 Groom is licensed under the [MIT License](LICENSE).
