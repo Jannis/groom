@@ -4,6 +4,29 @@
             [clojure.test.check.generators]
             [clojure.string :as str]))
 
+;;;; Type Names
+
+;; http://facebook.github.io/graphql/October2016/#sec-Names
+
+(def gen-name
+  (gen/fmap
+   #(str/join (apply concat %))
+   (gen/tuple
+    (gen/vector
+     (gen/frequency
+      [[9 (gen/char-alpha)]
+       [1 (gen/return \_)]]))
+    (gen/vector
+     (gen/frequency
+      [[9 (gen/char-alphanumeric)]
+       [1 (gen/return \_)]])))))
+
+(defn- not-nullable-name? [s]
+  (re-matches #"[_a-zA-Z][_0-9a-zA-Z]*!" (name s)))
+
+(defn- nullable-name? [s]
+  (re-matches #"[_a-zA-Z][_0-9a-zA-Z]*" (name s)))
+
 ;;;; Common
 
 (s/def ::directive
@@ -22,8 +45,24 @@
                  (symbol (str "?" (name sym))))
                (gen/symbol))))
 
+(s/def ::param-type-symbol!
+  (s/with-gen (s/and symbol? not-nullable-name?)
+    #(gen/fmap (fn [s] (symbol (str s "!"))) gen-name)))
+
+(s/def ::param-type-symbol*
+  (s/with-gen (s/and symbol? nullable-name?)
+    #(gen/fmap symbol gen-name)))
+
+(s/def ::param-type-symbol
+  (s/or :nullable ::param-type-symbol*
+        :not-nullable ::param-type-symbol!))
+
+(s/def ::param-type-list
+  (s/coll-of ::param-type-symbol :count 1 :kind vector?))
+
 (s/def ::param-type
-  '#{ID! String!})
+  (s/or :list ::param-type-list
+        :symbol ::param-type-symbol))
 
 (s/def ::params
   (s/map-of ::param-name

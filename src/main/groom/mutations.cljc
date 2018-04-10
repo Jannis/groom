@@ -3,10 +3,10 @@
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
             [groom.queries :as q]
-            [groom.specs.v1]))
+            [groom.specs.v1 :as v1]))
 
 (s/fdef graphql-bound-mutation-params
-  :args (s/cat :params (s/spec ::groom.specs.v1/mutation-call-params))
+  :args (s/cat :params (s/spec ::v1/mutation-call-params))
   :ret string?)
 
 (defn graphql-bound-mutation-params
@@ -18,12 +18,12 @@
     (str "(" (str/join "," gql-params) ")")))
 
 (s/fdef graphql-mutation
-  :args (s/cat :mutation (s/spec ::groom.specs.v1/mutation))
+  :args (s/cat :mutation (s/spec ::v1/mutation))
   :ret string?)
 
 (defn graphql-mutation
   [mutation]
-  (let [mutation     (s/conform ::groom.specs.v1/mutation mutation)
+  (let [mutation     (s/conform ::v1/mutation mutation)
         params       (some-> mutation :params q/graphql-query-params)
         bound-params (some->> mutation :call :params graphql-bound-mutation-params)
         directives   (some->> mutation :call :directives
